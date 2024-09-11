@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世界时钟 & 王者荣耀倒计时</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 90%;
+            max-width: 800px;
+        }
+        .time-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .time {
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            flex: 1;
+            padding: 10px;
+        }
+        #localTime {
+            color: #ffd700; /* 金色 */
+        }
+        #utc7Time {
+            color: #00ffff; /* 青色 */
+        }
+        #timeDiff {
+            font-size: 1.8em;
+            color: #ff69b4; /* 粉红色 */
+            margin-top: 30px;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .countdown {
+            font-size: 1.8em;
+            color: #ffa500; /* 橙色 */
+            margin-top: 30px;
+        }
+        .logo {
+            width: 150px;  // 调整大小以适应新图片
+            height: 150px;
+            margin: 20px auto;
+        }
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;  // 改为cover以确保图片填满容器
+            border-radius: 10px;  // 添加圆角
+        }
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+        }
+        .hero-image {
+            width: 150px;
+            height: 150px;
+            margin: 0 10px;
+        }
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>世界时钟</h1>
+        <div class="time-container">
+            <div id="localTime" class="time"></div>
+            <div id="utc7Time" class="time"></div>
+        </div>
+        <div id="timeDiff"></div>
+        <div class="image-container">
+            <div class="hero-image">
+                <img src="zhenji.jpeg" alt="甄姬">
+            </div>
+            <div class="hero-image">
+                <img src="shenji.jpg" alt="神机">
+            </div>
+        </div>
+        <div id="countdown" class="countdown"></div>
+    </div>
+    <script>
+        function formatDate(date) {
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+            return `${month}月${day}日<br>${hours}:${minutes}:${seconds}`;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const localTimeElement = document.getElementById('localTime');
+            const utc7TimeElement = document.getElementById('utc7Time');
+            const timeDiffElement = document.getElementById('timeDiff');
+
+            localTimeElement.innerHTML = `本地时间 (UTC+8):<br>${formatDate(now)}`;
+
+            const utc7Time = new Date(now.getTime() - 15 * 3600000);
+            utc7TimeElement.innerHTML = `UTC-7时间:<br>${formatDate(utc7Time)}`;
+
+            const timeDiff = -15;
+            timeDiffElement.textContent = `时差: ${timeDiff}小时`;
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 15);
+            const timeLeft = targetDate - now;
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = `王者荣耀新赛季倒计时:<br>${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+        }
+
+        setInterval(updateTime, 1000);
+        setInterval(updateCountdown, 1000);
+        updateTime();
+        updateCountdown();
+    </script>
+</body>
+</html>
